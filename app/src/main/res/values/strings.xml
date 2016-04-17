@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PomodoroTM</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_schedule">ScheduleActivity</string>
+    <string name="title_activity_task_details">TaskDetailsActivity</string>
+
+
+
+
+    <string name="task_name_hint">Nazwa zadania</string>
+</resources>
