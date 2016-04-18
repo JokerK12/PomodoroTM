@@ -1,1 +1,2 @@
-#PomodoroTM -Small application to help improve your daily task managment
+#PomodoroTM 
+>-Small application to help improve your daily task managment
