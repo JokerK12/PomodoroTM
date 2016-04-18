@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.kk.pomodorotm.adapters.TaskListItemAdapter;
 import com.kk.pomodorotm.date.Task;
+import com.kk.pomodorotm.date.TaskDBHandler;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -24,6 +25,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
     int month;
     int dayOfMonth;
     TextView date;
+    TaskDBHandler dbHandler;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +49,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         adapter.add(new Task("Dupa"));
         adapter.add(new1);
 
-       // setupAddPaymentButton();
+        //Create reference to database
+        dbHandler = new TaskDBHandler(this, null, null, 1);
 
     }
 
@@ -54,26 +60,27 @@ public class TaskDetailsActivity extends AppCompatActivity {
         taskListView.setAdapter(adapter);
     }
 
-//    private void setupAddPaymentButton() {
-//        findViewById(R.id.lv_task).setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                adapter.insert(new Task("",22,3,), 0);
-//            }
-//        });
-//    }
 
     public void addTaskClickHandler(View v) {
         EditText getTaskName = (EditText)findViewById(R.id.et_task_namee);
         Task newTask= new Task(getTaskName.getText().toString());
         adapter.add(newTask);
+        dbHandler.addTask(newTask);
+        printDatabase();
     }
 
     public void removeTaskClickHandler(View v) {
         Task itemToRemove = (Task)v.getTag();
         adapter.remove(itemToRemove);
+        dbHandler.deleteTask(itemToRemove.getName());
+        printDatabase();
     }
+
+    public void printDatabase() {
+        String dbString = dbHandler.databaseToString();
+        Log.d("DATABASE: ",dbString);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
