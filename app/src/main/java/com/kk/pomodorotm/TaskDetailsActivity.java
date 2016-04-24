@@ -18,12 +18,12 @@ import com.kk.pomodorotm.date.TaskDBHandler;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Date;
+
 
 public class TaskDetailsActivity extends AppCompatActivity {
     private TaskListItemAdapter adapter;
-    int year;
-    int month;
-    int dayOfMonth;
+
     TextView date;
     TaskDBHandler dbHandler;
 
@@ -34,24 +34,35 @@ public class TaskDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
 
-//        Bundle extras = getIntent().getExtras();
-////        if (extras != null) {
-////            year = extras.getInt("year");
-////            month = extras.getInt("month");
-////            dayOfMonth = extras.getInt("dayOfMonth");
-////        }
-////        date = (TextView)findViewById(R.id.tv_date);
-////        date.setText(String.valueOf(dayOfMonth + "/" + month + "/" + year));
-////        Log.d("TaskDetailsActivity", String.valueOf(dayOfMonth + "/" + month + "/" + year));
 
-        setupListViewAdapter();
-        Task new1 = new Task("Test");
-        adapter.add(new Task("Dupa"));
-        adapter.add(new1);
 
         //Create reference to database
         dbHandler = new TaskDBHandler(this, null, null, 1);
 
+        setupListViewAdapter();
+        setAdapter();
+
+
+
+    }
+
+    //getDate return date from extras which pass date from ScheduleActivity
+    private Date getDate () {
+        int year = 0;
+        int month = 0;
+        int dayOfMonth = 0;
+
+        Date date;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            year = extras.getInt("year");
+            month = extras.getInt("month");
+            dayOfMonth = extras.getInt("dayOfMonth");
+        }
+        date = new Date(year, month, dayOfMonth);
+        Log.d("TaskDetailsActivity", String.valueOf(dayOfMonth + "/" + month + "/" + year));
+
+        return date;
     }
 
     private void setupListViewAdapter() {
@@ -64,21 +75,31 @@ public class TaskDetailsActivity extends AppCompatActivity {
     public void addTaskClickHandler(View v) {
         EditText getTaskName = (EditText)findViewById(R.id.et_task_namee);
         Task newTask= new Task(getTaskName.getText().toString());
-        adapter.add(newTask);
+        newTask.setDate(getDate());
         dbHandler.addTask(newTask);
-        printDatabase();
+        printDatabase(); //logcat
+        setAdapter();
     }
 
     public void removeTaskClickHandler(View v) {
         Task itemToRemove = (Task)v.getTag();
-        adapter.remove(itemToRemove);
         dbHandler.deleteTask(itemToRemove.getName());
-        printDatabase();
+        printDatabase(); //logcat
+        setAdapter();
     }
 
     public void printDatabase() {
         String dbString = dbHandler.databaseToString();
         Log.d("DATABASE: ",dbString);
+    }
+
+    public void setAdapter() {
+        adapter.clear();
+        ArrayList<Task> taskList = dbHandler.databaseGetTaskObject();
+        for(Task task : taskList) {
+            adapter.add(task);
+        }
+
     }
 
     @Override

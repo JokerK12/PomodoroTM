@@ -2,6 +2,7 @@ package com.kk.pomodorotm.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class TaskListItemAdapter extends ArrayAdapter<Task> {
         holder.removeTaskButton = (ImageButton)row.findViewById(R.id.ib_task_remove_button);
         holder.removeTaskButton.setTag(holder.task);
         holder.taskName = (TextView)row.findViewById(R.id.et_task_name);
+        holder.taskDate = (TextView)row.findViewById(R.id.et_task_date);
 
         row.setTag(holder);
 
@@ -56,12 +58,14 @@ public class TaskListItemAdapter extends ArrayAdapter<Task> {
 
     public void setupItem(TaskItemHolder holder) {
         holder.taskName.setText(holder.task.getName());
-
+        Log.d("Adapter dostal: ", holder.task.getDateAdapter());
+        holder.taskDate.setText(holder.task.getDateAdapter());
     }
 
     public static class TaskItemHolder {
         Task task;
         TextView taskName;
+        TextView taskDate;
         ImageButton removeTaskButton;
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -19,16 +20,20 @@ public class TaskDBHandler extends SQLiteOpenHelper {
     public static final String  TABLE_TASKS = "tasks";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TASKNAME = "taskname";
+    public static final String COLUMN_TASKDATE = "taskdate";
 
     public TaskDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        context.deleteDatabase(DATABASE_NAME);
+        Log.d("DBHANDLER ", "jestem tutaj!");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_TASKS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_TASKNAME + " TEXT" +
+                COLUMN_TASKNAME + " TEXT, " +
+                COLUMN_TASKDATE + " DATE " +
                 ");";
         db.execSQL(query);
     }
@@ -41,8 +46,11 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
     //Add a new row to the database
     public void addTask(Task task) {
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TASKNAME, task.getName());
+        Log.d("Pokaz date", task.getDate());
+        values.put(COLUMN_TASKDATE, task.getDate());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_TASKS, null, values);
         db.close();
@@ -68,12 +76,15 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
         while(!c.isAfterLast()) {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
-                tasks.add(new Task(c.getString((c.getColumnIndex("taskname")))));
+                Task temp = new Task(c.getInt(c.getColumnIndex("_id")), c.getString((c.getColumnIndex("taskname"))));
+                temp.setDateString(c.getString((c.getColumnIndex("taskdate"))));
+                tasks.add(temp);
             }
+            c.moveToNext();
 
         }
 
-
+        c.close();
         db.close();
         return tasks;
     }
@@ -90,7 +101,8 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
         while(!c.isAfterLast()) {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
-                dbString += c.getString(c.getColumnIndex("taskname"));
+                dbString += c.getString(c.getColumnIndex("_id")) + " " + c.getString(c.getColumnIndex("taskname"));
+                dbString += " " + c.getString(c.getColumnIndex("taskdate"));
                 dbString += "\n";
             }
             c.moveToNext();
