@@ -24,7 +24,8 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
     public TaskDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
-        context.deleteDatabase(DATABASE_NAME);
+        //delete existing database
+        //context.deleteDatabase(DATABASE_NAME);
         Log.d("DBHANDLER ", "jestem tutaj!");
     }
 

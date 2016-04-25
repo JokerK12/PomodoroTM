@@ -16,16 +16,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+    }
 
+    public void startWorkActivity(View v) {
+        Intent workActivity = new Intent(getApplicationContext(), WorkActivity.class);
+        startActivity(workActivity);
+    }
 
-        findViewById(R.id.btn_schedule).setOnClickListener(new View.OnClickListener(){
-            @Override
-        public void onClick(View v) {
-                Intent scheduleAcitivity = new Intent(getApplicationContext(),ScheduleActivity.class);
-                startActivity(scheduleAcitivity);
-            }
-        });
-
+    public void startScheduleActivity (View v) {
+        Intent scheduleAcitivity = new Intent(getApplicationContext(),ScheduleActivity.class);
+        startActivity(scheduleAcitivity);
     }
 
     @Override

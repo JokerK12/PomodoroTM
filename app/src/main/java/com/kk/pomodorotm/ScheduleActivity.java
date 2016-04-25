@@ -14,11 +14,6 @@ public class ScheduleActivity extends AppCompatActivity {
 
     CalendarView schedule;
 
-    /*Tymaczasowe rozwiazanie */
-    public static int year;
-    int month;
-    int day;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

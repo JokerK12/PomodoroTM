@@ -1,6 +1,7 @@
 package com.kk.pomodorotm;
 
-import android.app.Activity;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,22 +10,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kk.pomodorotm.adapters.TaskListItemAdapter;
+import com.kk.pomodorotm.adapters.TaskListItemScheduleAdapter;
 import com.kk.pomodorotm.date.Task;
 import com.kk.pomodorotm.date.TaskDBHandler;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Date;
 
 
 public class TaskDetailsActivity extends AppCompatActivity {
-    private TaskListItemAdapter adapter;
 
-    TextView date;
+    private TaskListItemScheduleAdapter adapter;
     TaskDBHandler dbHandler;
 
 
@@ -47,7 +44,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     }
 
     //getDate return date from extras which pass date from ScheduleActivity
-    private Date getDate () {
+    private Date getDateFromActivity () {
         int year = 0;
         int month = 0;
         int dayOfMonth = 0;
@@ -66,7 +63,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     }
 
     private void setupListViewAdapter() {
-        adapter = new TaskListItemAdapter(TaskDetailsActivity.this, R.layout.task_list_item, new ArrayList<Task>());
+        adapter = new TaskListItemScheduleAdapter(TaskDetailsActivity.this, R.layout.task_list_item_details, new ArrayList<Task>());
         ListView taskListView = (ListView)findViewById(R.id.lv_task);
         taskListView.setAdapter(adapter);
     }
@@ -75,7 +72,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     public void addTaskClickHandler(View v) {
         EditText getTaskName = (EditText)findViewById(R.id.et_task_namee);
         Task newTask= new Task(getTaskName.getText().toString());
-        newTask.setDate(getDate());
+        newTask.setDate(getDateFromActivity());
         dbHandler.addTask(newTask);
         printDatabase(); //logcat
         setAdapter();
@@ -88,6 +85,28 @@ public class TaskDetailsActivity extends AppCompatActivity {
         setAdapter();
     }
 
+    //Alert dialog with remove confirmation
+    public void confirmRemoveTask(View v) {
+        final View pastView = v;
+        Task itemToRemove = (Task)v.getTag();
+        new AlertDialog.Builder(TaskDetailsActivity.this)
+                .setTitle(itemToRemove.getName())
+                .setMessage("Napewno usunąć to zadanie?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        removeTaskClickHandler(pastView);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_menu_delete)
+                .show();
+    }
+
     public void printDatabase() {
         String dbString = dbHandler.databaseToString();
         Log.d("DATABASE: ",dbString);
@@ -96,10 +115,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
     public void setAdapter() {
         adapter.clear();
         ArrayList<Task> taskList = dbHandler.databaseGetTaskObject();
+        Date temp = getDateFromActivity();
+        //Add objects to adapter if date is the same as choosen day
         for(Task task : taskList) {
-            adapter.add(task);
+            if (task.getDate().equals(Task.getDateAsString(temp))) {
+                adapter.add(task);
+            }
         }
-
     }
 
     @Override

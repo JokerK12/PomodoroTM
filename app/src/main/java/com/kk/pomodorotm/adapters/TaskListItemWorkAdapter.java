@@ -13,19 +13,19 @@ import android.widget.TextView;
 import com.kk.pomodorotm.R;
 import com.kk.pomodorotm.date.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Karol on 2016-04-14.
+ * Created by Karol on 2016-04-26.
  */
-
-public class TaskListItemAdapter extends ArrayAdapter<Task> {
+public class TaskListItemWorkAdapter extends ArrayAdapter<Task> {
 
     private List<Task> items;
     private int layoutRescourceId;
     private Context context;
 
-    public TaskListItemAdapter(Context context, int layoutRescourceId, List<Task> items) {
+    public TaskListItemWorkAdapter(Context context, int layoutRescourceId, List<Task> items) {
         super(context, layoutRescourceId, items);
         this.layoutRescourceId = layoutRescourceId;
         this.context = context;
@@ -44,8 +44,6 @@ public class TaskListItemAdapter extends ArrayAdapter<Task> {
 
 
         holder.task = items.get(position);
-        holder.removeTaskButton = (ImageButton)row.findViewById(R.id.ib_task_remove_button);
-        holder.removeTaskButton.setTag(holder.task);
         holder.taskName = (TextView)row.findViewById(R.id.et_task_name);
         holder.taskDate = (TextView)row.findViewById(R.id.et_task_date);
 
@@ -58,14 +56,15 @@ public class TaskListItemAdapter extends ArrayAdapter<Task> {
 
     public void setupItem(TaskItemHolder holder) {
         holder.taskName.setText(holder.task.getName());
-        Log.d("Adapter dostal: ", holder.task.getDateAdapter());
-        holder.taskDate.setText(holder.task.getDateAdapter());
+        Log.d("Adapter dostal: ", holder.task.getDateAdapterAsString());
+        holder.taskDate.setText(holder.task.getDateAdapterAsString());
     }
 
     public static class TaskItemHolder {
         Task task;
         TextView taskName;
         TextView taskDate;
-        ImageButton removeTaskButton;
+
     }
+
 }

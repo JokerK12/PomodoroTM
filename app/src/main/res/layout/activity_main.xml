@@ -11,11 +11,13 @@
         android:layout_height="wrap_content"
         android:text="Pracuj"
         android:id="@+id/btn_work"
+        android:onClick="startWorkActivity"
         android:layout_gravity="center_vertical" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="startScheduleActivity"
         android:text="Ułóż plan"
         android:id="@+id/btn_schedule"
         android:layout_gravity="center_vertical" />

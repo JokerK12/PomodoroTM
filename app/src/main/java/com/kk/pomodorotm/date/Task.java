@@ -54,8 +54,12 @@ public class Task {
     }
 
     //Moths are order from 0 to 11 method returns correct month for adapter month+1
-    public String getDateAdapter() {
+    public String getDateAdapterAsString() {
         return this._taskDate.getDate()+ "/" + (this._taskDate.getMonth()+1) + "/" + this._taskDate.getYear();
+    }
+
+    public static String getDateAsString(Date date) {
+        return date.getDate()+ "/" + date.getMonth() + "/" + date.getYear();
     }
 
 
