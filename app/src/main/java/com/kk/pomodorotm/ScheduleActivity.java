@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.Toast;
 
+import java.sql.Date;
+
 public class ScheduleActivity extends AppCompatActivity {
 
     CalendarView schedule;
@@ -26,17 +28,17 @@ public class ScheduleActivity extends AppCompatActivity {
 
 
             @Override
-            public void onSelectedDayChange(CalendarView view, final int year, final int month, final int dayOfMonth) {
+            public void onSelectedDayChange(CalendarView view,  int year, int month, int dayOfMonth) {
+                month = month+1;
                 Toast.makeText(getApplicationContext(), dayOfMonth + "/" + month + "/" + year, Toast.LENGTH_SHORT).show();
-
+                final Date calendarDate = Date.valueOf(year+"-"+month+"-"+dayOfMonth);
 
                 findViewById(R.id.btn_create_task).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent TaskDetailsActivity = new Intent(getApplicationContext(), TaskDetailsActivity.class);
-                        TaskDetailsActivity.putExtra("year",year);
-                        TaskDetailsActivity.putExtra("month",month);
-                        TaskDetailsActivity.putExtra("dayOfMonth",dayOfMonth);
+                        TaskDetailsActivity.putExtra("calendarDate",calendarDate);
+
                         startActivity(TaskDetailsActivity);
                     }
                 });

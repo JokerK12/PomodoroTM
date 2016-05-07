@@ -1,8 +1,12 @@
 package com.kk.pomodorotm.date;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 
-import java.util.Date;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
+import java.util.Locale;
 
 /**
  * Created by Karol on 2016-03-18.
@@ -10,8 +14,10 @@ import java.util.Date;
 public class Task {
     private int _id;
     private String _taskName;
-    private Date   _taskDate;
-    private boolean _taskDone;
+    private Date _taskDate;
+    private boolean _taskDone = false;
+    private int _taskInterval = 0;
+
 
 
 
@@ -42,24 +48,24 @@ public class Task {
 
     //Method set Date from Database string
     public void setDateString(String date) {
-        String[] dateInt = date.split("/");
-        Log.d("Parse Date: ", (Integer.parseInt(dateInt[0])+ " "+Integer.parseInt(dateInt[1])+ " "+ Integer.parseInt(dateInt[2])));
+        this._taskDate = Date.valueOf(date);
+        Log.d("Task setDateString ", "" +this._taskDate);
 
-        this._taskDate = new Date(Integer.parseInt(dateInt[2]),Integer.parseInt(dateInt[1]),Integer.parseInt(dateInt[0]));
 
     }
 
+    //Returns date
     public String getDate() {
-        return this._taskDate.getDate()+ "/" + this._taskDate.getMonth() + "/" + this._taskDate.getYear();
+        return this._taskDate.toString();
     }
 
-    //Moths are order from 0 to 11 method returns correct month for adapter month+1
-    public String getDateAdapterAsString() {
-        return this._taskDate.getDate()+ "/" + (this._taskDate.getMonth()+1) + "/" + this._taskDate.getYear();
-    }
+    //Method returns date specifed to show in adapters
+    public String getDateToShowInAdapter() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate;
+        formattedDate = formatter.format(this._taskDate);
 
-    public static String getDateAsString(Date date) {
-        return date.getDate()+ "/" + date.getMonth() + "/" + date.getYear();
+        return formattedDate;
     }
 
 

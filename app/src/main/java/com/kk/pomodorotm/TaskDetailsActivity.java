@@ -15,8 +15,9 @@ import com.kk.pomodorotm.adapters.TaskListItemScheduleAdapter;
 import com.kk.pomodorotm.date.Task;
 import com.kk.pomodorotm.date.TaskDBHandler;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
+
 
 
 public class TaskDetailsActivity extends AppCompatActivity {
@@ -45,19 +46,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
     //getDate return date from extras which pass date from ScheduleActivity
     private Date getDateFromActivity () {
-        int year = 0;
-        int month = 0;
-        int dayOfMonth = 0;
 
-        Date date;
+        Date date = null ;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            year = extras.getInt("year");
-            month = extras.getInt("month");
-            dayOfMonth = extras.getInt("dayOfMonth");
+            date = (Date) getIntent().getSerializableExtra("calendarDate");
         }
-        date = new Date(year, month, dayOfMonth);
-        Log.d("TaskDetailsActivity", String.valueOf(dayOfMonth + "/" + month + "/" + year));
+
 
         return date;
     }
@@ -73,6 +68,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         EditText getTaskName = (EditText)findViewById(R.id.et_task_namee);
         Task newTask= new Task(getTaskName.getText().toString());
         newTask.setDate(getDateFromActivity());
+        Log.d("TaskDetailsActivity", getDateFromActivity().toString());
         dbHandler.addTask(newTask);
         printDatabase(); //logcat
         setAdapter();
@@ -118,7 +114,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         Date temp = getDateFromActivity();
         //Add objects to adapter if date is the same as choosen day
         for(Task task : taskList) {
-            if (task.getDate().equals(Task.getDateAsString(temp))) {
+            Log.d("TaskDetailActi","Porównaj: "+ task.getDate() + "  " + temp.toString());
+            if (task.getDate().equals(temp.toString())) {
                 adapter.add(task);
             }
         }

@@ -2,23 +2,33 @@ package com.kk.pomodorotm;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.kk.pomodorotm.adapters.TaskListItemScheduleAdapter;
 import com.kk.pomodorotm.adapters.TaskListItemWorkAdapter;
 import com.kk.pomodorotm.date.Task;
 import com.kk.pomodorotm.date.TaskDBHandler;
+import com.kk.pomodorotm.services.TaskCountDownTimer;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class WorkActivity extends AppCompatActivity {
 
     private TaskListItemWorkAdapter adapter;
-    TaskDBHandler dbHandler;
+    private TaskDBHandler dbHandler;
+    private TextView taskName;
+    private TextView taskTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +39,9 @@ public class WorkActivity extends AppCompatActivity {
         dbHandler = new TaskDBHandler(this, null, null, 1);
         setupListViewAdapter();
         setAdapter();
+        taskName = (TextView)findViewById(R.id.tv_task_name);
+        taskTimer = (TextView)findViewById(R.id.tv_task_timer);
+
 
     }
 
@@ -36,7 +49,25 @@ public class WorkActivity extends AppCompatActivity {
         adapter = new TaskListItemWorkAdapter(WorkActivity.this, R.layout.task_list_item_work, new ArrayList<Task>());
         ListView taskListView = (ListView)findViewById(R.id.lv_task_work);
         taskListView.setAdapter(adapter);
+
+
+        taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("WorkActivity", " "+  adapter.getTaskName(position));
+                taskName.setText(adapter.getTaskName(position));
+
+            }
+        });
     }
+
+    public void startTaskTimer(View v) {
+        TaskCountDownTimer taskTimer = new TaskCountDownTimer(1500000,1000, this.taskTimer);
+        taskTimer.start();
+    }
+
+
+
 
     public void setAdapter() {
         adapter.clear();
@@ -44,8 +75,8 @@ public class WorkActivity extends AppCompatActivity {
         //Add objects to adapter if date is the same as choosen day
 
         for(Task task : taskList) {
-            Log.d("Work Activity Porównaj:", task.getDateAdapterAsString() + "||" + (getCurrentDate()));
-            if(task.getDateAdapterAsString().equals(getCurrentDate())) {
+            Log.d("Work Activity Porównaj:", task.getDate() + "||" + (getCurrentDate()));
+            if(task.getDate().equals(getCurrentDate())) {
                 adapter.add(task);
             }
         }
@@ -53,7 +84,8 @@ public class WorkActivity extends AppCompatActivity {
 
     //Returns String object  with current date
     private String getCurrentDate() {
-        String currentDate = new SimpleDateFormat("d/M/yyyy", Locale.getDefault()).format(new Date());
+        java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(sqlDate);
         return currentDate;
     }
 }

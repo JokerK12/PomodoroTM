@@ -79,6 +79,7 @@ public class TaskDBHandler extends SQLiteOpenHelper {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
                 Task temp = new Task(c.getInt(c.getColumnIndex("_id")), c.getString((c.getColumnIndex("taskname"))));
                 temp.setDateString(c.getString((c.getColumnIndex("taskdate"))));
+                Log.d("TaskDbHandler",c.getString((c.getColumnIndex("taskdate"))) );
                 tasks.add(temp);
             }
             c.moveToNext();
