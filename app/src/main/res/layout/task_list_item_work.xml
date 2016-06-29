@@ -10,7 +10,6 @@
 
         <TextView
             android:id="@+id/et_task_name"
-            android:width="300dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medium Text"
@@ -23,6 +22,22 @@
             android:id="@+id/et_task_date"
             android:layout_width="wrap_content" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:id="@+id/tv_intervals_quantity" />
+
+    <ImageView
+        android:visibility="invisible"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/iv_interval_clock"
+        android:src="@drawable/ic_intervalclock"
+        />
 
 
 </LinearLayout>

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Nazwa zadania"
+            android:text="Wybierz zadanie"
             android:id="@+id/tv_task_name" />
 
         <TextView
@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="Start"
                 android:id="@+id/btn_task_start_reset"
+                android:clickable="false"
                 android:onClick="startTaskTimer" />
 
             <Button
@@ -59,7 +60,9 @@
                 android:layout_marginLeft="40dp"
                 android:background="#58A040"
                 android:text="Zrobione"
-                android:id="@+id/btn_task_done" />
+                android:id="@+id/btn_task_done"
+                android:clickable="false"
+                android:onClick="taskIsDone"/>
         </LinearLayout>
 
         <TextView

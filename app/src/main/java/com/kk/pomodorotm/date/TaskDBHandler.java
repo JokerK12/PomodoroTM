@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +22,9 @@ public class TaskDBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TASKNAME = "taskname";
     public static final String COLUMN_TASKDATE = "taskdate";
+    public static final String COLUMN_TASKDONE = "taskdone";
+    public static final String COLUMN_TASKINTERVAL = "taskinterval";
+
 
     public TaskDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -34,7 +38,9 @@ public class TaskDBHandler extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_TASKS + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TASKNAME + " TEXT, " +
-                COLUMN_TASKDATE + " DATE " +
+                COLUMN_TASKDATE + " DATE, " +
+                COLUMN_TASKDONE + " BOOLEAN, "+
+                COLUMN_TASKINTERVAL + " INTEGER " +
                 ");";
         db.execSQL(query);
     }
@@ -58,10 +64,28 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
     }
 
+
     //Delete a product from database
-    public void deleteTask(String taskName) {
+    public void deleteTask(String taskName, Date taskDate) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_TASKS + " WHERE " + COLUMN_TASKNAME + "=\"" + taskName + "\";");
+        Log.d("TaskDBHandler","DELETE FROM " + TABLE_TASKS + " WHERE (" + COLUMN_TASKNAME + "=\"" + taskName +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + taskDate + "\");" );
+        db.execSQL("DELETE FROM " + TABLE_TASKS + " WHERE (" + COLUMN_TASKNAME + "=\"" + taskName +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + taskDate + "\");" );
+
+    }
+
+    //Update taskDone variable
+    public void updateTaskDone(Task update) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKDONE + "=\"" + update.getIsTaskDone() + "\"" + " WHERE (" +
+                COLUMN_TASKNAME + "=\"" + update.getName() +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\");" );
+
+    }
+
+    //Update taskIntervals variable
+    public void updateTaskIntervals(Task update) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKINTERVAL + "=\"" + update.getTaskInterval() + "\"" + " WHERE (" +
+                COLUMN_TASKNAME + "=\"" + update.getName() +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\");" );
 
     }
 
@@ -77,8 +101,11 @@ public class TaskDBHandler extends SQLiteOpenHelper {
 
         while(!c.isAfterLast()) {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
-                Task temp = new Task(c.getInt(c.getColumnIndex("_id")), c.getString((c.getColumnIndex("taskname"))));
+                Task temp = new Task(c.getInt(c.getColumnIndex("_id")), c.getString((c.getColumnIndex("taskname"))));               //todo Dodac zmienne taskDone i taskIntervals
                 temp.setDateString(c.getString((c.getColumnIndex("taskdate"))));
+                temp.setIstaskDone(c.getInt((c.getColumnIndex("taskdone"))));
+                temp.setTaskInterval(c.getInt(c.getColumnIndex("taskinterval")));
+
                 Log.d("TaskDbHandler",c.getString((c.getColumnIndex("taskdate"))) );
                 tasks.add(temp);
             }
@@ -105,6 +132,8 @@ public class TaskDBHandler extends SQLiteOpenHelper {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
                 dbString += c.getString(c.getColumnIndex("_id")) + " " + c.getString(c.getColumnIndex("taskname"));
                 dbString += " " + c.getString(c.getColumnIndex("taskdate"));
+                dbString += " " + c.getString(c.getColumnIndex("taskdone"));
+                dbString += " " + c.getString(c.getColumnIndex("taskinterval"));
                 dbString += "\n";
             }
             c.moveToNext();

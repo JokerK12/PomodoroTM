@@ -76,7 +76,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
     public void removeTaskClickHandler(View v) {
         Task itemToRemove = (Task)v.getTag();
-        dbHandler.deleteTask(itemToRemove.getName());
+        dbHandler.deleteTask(itemToRemove.getName(), Date.valueOf(itemToRemove.getDate()));
         printDatabase(); //logcat
         setAdapter();
     }

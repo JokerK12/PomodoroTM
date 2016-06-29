@@ -46,12 +46,41 @@ public class Task {
         this._taskDate = date;
     }
 
+    public boolean getIsTaskDone() {
+        return _taskDone;
+    }
+
+    public void setIstaskDone(int _taskDone) {
+        if (_taskDone > 0) {
+            this._taskDone = true;
+        }
+        else
+        {
+            this._taskDone = false;
+        }
+    }
+
+    public void setIstaskDone( boolean _taskDone) {
+        this._taskDone = _taskDone;
+    }
+
+    //Method set _taskInterval
+    public void setTaskInterval(int taskInterval) {
+        this._taskInterval = taskInterval;
+    }
+
+    public int getTaskInterval() {
+        return this._taskInterval;
+    }
+
+    public void increaseTaskInterval() {
+        this._taskInterval = this._taskInterval +1;
+    }
+
     //Method set Date from Database string
     public void setDateString(String date) {
         this._taskDate = Date.valueOf(date);
         Log.d("Task setDateString ", "" +this._taskDate);
-
-
     }
 
     //Returns date
