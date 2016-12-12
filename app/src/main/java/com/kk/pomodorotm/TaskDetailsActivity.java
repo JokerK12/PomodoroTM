@@ -112,9 +112,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
         adapter.clear();
         ArrayList<Task> taskList = dbHandler.databaseGetTaskObject();
         Date temp = getDateFromActivity();
+        Date tempYesterday = new Date(temp.getYear(),temp.getMonth(),temp.getDate()-1);
         //Add objects to adapter if date is the same as choosen day
         for(Task task : taskList) {
-            Log.d("TaskDetailActi","Porównaj: "+ task.getDate() + "  " + temp.toString());
+            Log.d("TaskDetailActi","Porównaj: "+task.getName() +" "+ (task.getDate()+" "+tempYesterday));                                                               //todo Wywalić ta czesc kodu
             if (task.getDate().equals(temp.toString())) {
                 adapter.add(task);
             }

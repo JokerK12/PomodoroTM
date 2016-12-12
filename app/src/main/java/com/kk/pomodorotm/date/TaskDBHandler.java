@@ -65,7 +65,7 @@ public class TaskDBHandler extends SQLiteOpenHelper {
     }
 
 
-    //Delete a product from database
+    //Delete a Task from database
     public void deleteTask(String taskName, Date taskDate) {
         SQLiteDatabase db = getWritableDatabase();
         Log.d("TaskDBHandler","DELETE FROM " + TABLE_TASKS + " WHERE (" + COLUMN_TASKNAME + "=\"" + taskName +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + taskDate + "\");" );
@@ -76,6 +76,9 @@ public class TaskDBHandler extends SQLiteOpenHelper {
     //Update taskDone variable
     public void updateTaskDone(Task update) {
         SQLiteDatabase db = getWritableDatabase();
+        Log.d("TaskDbHandler show me","UPDATE" + TABLE_TASKS + " SET " + COLUMN_TASKDONE + "=\"" + update.getIsTaskDone() + "\"" + " WHERE (" +
+                COLUMN_TASKNAME + "=\"" + update.getName() +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\");"  );
+        //
         db.execSQL("UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKDONE + "=\"" + update.getIsTaskDone() + "\"" + " WHERE (" +
                 COLUMN_TASKNAME + "=\"" + update.getName() +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\");" );
 
@@ -87,6 +90,13 @@ public class TaskDBHandler extends SQLiteOpenHelper {
         db.execSQL("UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKINTERVAL + "=\"" + update.getTaskInterval() + "\"" + " WHERE (" +
                 COLUMN_TASKNAME + "=\"" + update.getName() +"\"" + " AND " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\");" );
 
+    }
+
+    //Update taskDate variable
+    public void updateTaskDate(Task update) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKDATE + "=\"" + update.getDate() + "\"" + " WHERE (" +
+                COLUMN_TASKNAME + "=\"" + update.getName() + "\");" );
     }
 
     //Get date from database and create ArrayList<Task>
@@ -103,10 +113,11 @@ public class TaskDBHandler extends SQLiteOpenHelper {
             if(c.getString(c.getColumnIndex("taskname"))!= null) {
                 Task temp = new Task(c.getInt(c.getColumnIndex("_id")), c.getString((c.getColumnIndex("taskname"))));               //todo Dodac zmienne taskDone i taskIntervals
                 temp.setDateString(c.getString((c.getColumnIndex("taskdate"))));
-                temp.setIstaskDone(c.getInt((c.getColumnIndex("taskdone"))));
+                temp.setIstaskDone(c.getString((c.getColumnIndex("taskdone"))));
                 temp.setTaskInterval(c.getInt(c.getColumnIndex("taskinterval")));
 
                 Log.d("TaskDbHandler",c.getString((c.getColumnIndex("taskdate"))) );
+
                 tasks.add(temp);
             }
             c.moveToNext();

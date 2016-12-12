@@ -50,8 +50,10 @@ public class Task {
         return _taskDone;
     }
 
-    public void setIstaskDone(int _taskDone) {
-        if (_taskDone > 0) {
+    public void setIstaskDone(String taskDone) {
+        if(taskDone != null)
+        if (taskDone.equals("true"))
+        {
             this._taskDone = true;
         }
         else
@@ -60,7 +62,7 @@ public class Task {
         }
     }
 
-    public void setIstaskDone( boolean _taskDone) {
+    public void setIstaskDone(boolean _taskDone) {
         this._taskDone = _taskDone;
     }
 

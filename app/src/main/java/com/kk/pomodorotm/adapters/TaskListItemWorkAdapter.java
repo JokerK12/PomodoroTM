@@ -54,23 +54,35 @@ public class TaskListItemWorkAdapter extends ArrayAdapter<Task> {
         holder = new TaskItemHolder();
 
         holder.task = items.get(position);
-
-        holder.taskName = (TextView)row.findViewById(R.id.et_task_name);
-        holder.taskDate = (TextView)row.findViewById(R.id.et_task_date);
-        holder.taskIntervals = (TextView)row.findViewById(R.id.tv_intervals_quantity);
-        holder.taskIntervalsImage = (ImageView)row.findViewById(R.id.iv_interval_clock);
-
+        holder.taskName = (TextView) row.findViewById(R.id.et_task_name);
+        holder.taskDate = (TextView) row.findViewById(R.id.et_task_date);
+        holder.taskIntervals = (TextView) row.findViewById(R.id.tv_intervals_quantity);
+        holder.taskIntervalsImage = (ImageView) row.findViewById(R.id.iv_interval_clock);
+        holder.taskDoneImage = (ImageView) row.findViewById(R.id.iv_task_done);
 
         row.setTag(holder);
         setupItem(holder);
+
 
         return row;
     }
 
     public void setupItem(TaskItemHolder holder) {
+
         holder.taskName.setText(holder.task.getName());
         holder.taskDate.setText(holder.task.getDateToShowInAdapter());
         setIntervalsGraphic(holder);
+        setTaskDoneGraphic(holder);
+
+    }
+
+    public void setupItemTaskDone(TaskItemHolder holder) {
+       // if (holder.task.getIsTaskDone()) {
+            holder.taskName.setText(holder.task.getName());
+            holder.taskDate.setText(holder.task.getDateToShowInAdapter());
+            setIntervalsGraphic(holder);
+            setTaskDoneGraphic(holder);
+       // }
     }
 
 
@@ -89,6 +101,7 @@ public class TaskListItemWorkAdapter extends ArrayAdapter<Task> {
         TextView taskDate;
         TextView taskIntervals;
         ImageView taskIntervalsImage;
+        ImageView taskDoneImage;
     }
 
     public void setIntervalsGraphic(TaskItemHolder holder) {
@@ -96,6 +109,15 @@ public class TaskListItemWorkAdapter extends ArrayAdapter<Task> {
             holder.taskIntervalsImage.setVisibility(View.VISIBLE);
             holder.taskIntervals.setText(holder.task.getTaskInterval()+"x");
         }
+    }
+
+    public void setTaskDoneGraphic(TaskItemHolder holder) {
+        Log.d("TaskName DoneGraphic ",""+ holder.task.getName()+ " " + holder.task.getIsTaskDone());
+        if(holder.task.getIsTaskDone()) {
+            holder.taskDoneImage.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
 

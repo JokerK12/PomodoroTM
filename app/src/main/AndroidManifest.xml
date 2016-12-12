@@ -18,11 +18,12 @@
         </activity>
         <activity
             android:name=".ScheduleActivity"
-            android:label="@string/title_activity_schedule"></activity>
+            android:label="@string/title_activity_schedule" />
         <activity
             android:name=".TaskDetailsActivity"
-            android:label="@string/title_activity_task_details"></activity>
-        <activity android:name=".WorkActivity"></activity>
+            android:label="@string/title_activity_task_details" />
+        <activity android:name=".WorkActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

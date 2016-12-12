@@ -25,6 +25,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Statystyki"
+        android:onClick="startSettingsActivity"
+        android:text="Ustawienia"
         android:id="@+id/btn_statistics" />
 </LinearLayout>
